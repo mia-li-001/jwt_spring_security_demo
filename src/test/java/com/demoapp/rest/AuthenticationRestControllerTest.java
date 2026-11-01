@@ -91,11 +91,7 @@ public class AuthenticationRestControllerTest {
 
         JwtUser jwtUser = JwtUserFactory.create(user);
 
-        when(jwtTokenUtil.getUsernameFromToken(any())).thenReturn(user.getUsername());
-
-        when(jwtUserDetailsService.loadUserByUsername(eq(user.getUsername()))).thenReturn(jwtUser);
-
-        when(jwtTokenUtil.canTokenBeRefreshed(any(), any())).thenReturn(true);
+        setupJwtTokenUtilCanTokenBeRefreshedAndGetUsernameFromTokenAnd1MoreStubs(user, jwtUser);
 
         mvc.perform(get("/refresh")
                 .header("Authorization", "Bearer 5d1103e-b3e1-4ae9-b606-46c9c1bc915a"))
@@ -119,11 +115,7 @@ public class AuthenticationRestControllerTest {
 
         JwtUser jwtUser = JwtUserFactory.create(user);
 
-        when(jwtTokenUtil.getUsernameFromToken(any())).thenReturn(user.getUsername());
-
-        when(jwtUserDetailsService.loadUserByUsername(eq(user.getUsername()))).thenReturn(jwtUser);
-
-        when(jwtTokenUtil.canTokenBeRefreshed(any(), any())).thenReturn(true);
+        setupJwtTokenUtilCanTokenBeRefreshedAndGetUsernameFromTokenAnd1MoreStubs(user, jwtUser);
 
         mvc.perform(get("/refresh")
                 .header("Authorization", "Bearer 5d1103e-b3e1-4ae9-b606-46c9c1bc915a"))
@@ -136,6 +128,12 @@ public class AuthenticationRestControllerTest {
 
         mvc.perform(get("/refresh"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    private void setupJwtTokenUtilCanTokenBeRefreshedAndGetUsernameFromTokenAnd1MoreStubs(User user, JwtUser jwtUser) {
+        when(jwtTokenUtil.getUsernameFromToken(any())).thenReturn(user.getUsername());
+        when(jwtUserDetailsService.loadUserByUsername(eq(user.getUsername()))).thenReturn(jwtUser);
+        when(jwtTokenUtil.canTokenBeRefreshed(any(), any())).thenReturn(true);
     }
 }
 
